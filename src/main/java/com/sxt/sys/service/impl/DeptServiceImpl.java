@@ -1,6 +1,7 @@
 package com.sxt.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import com.sxt.sys.domain.Dept;
 import com.sxt.sys.mapper.DeptMapper;
 import com.sxt.sys.service.DeptService;
@@ -26,8 +27,8 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     }
 
     @Override
-    public boolean update(Dept entity, Wrapper<Dept> updateWrapper) {
-        return super.update(entity, updateWrapper);
+    public boolean updateById(Dept entity) {
+        return super.updateById(entity);
     }
 
     @Override

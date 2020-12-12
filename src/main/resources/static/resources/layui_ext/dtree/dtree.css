@@ -103,7 +103,7 @@
 .dtree-select-show{display: block!important;}
 
 /* 简单适配*/
-@media screen and (max-width:1700px) and (min-width:1300px){
+@media screen and (max-width:1700px) and (min-width:1300px){	
 	.dtree-nav-item {padding-left: 15px;}
 }
 

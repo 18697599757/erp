@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -76,6 +74,9 @@ public class DeptController {
      */
     @RequestMapping("addDept")
     public ResultObj addDept(DeptVo deptVo){
+        if (deptVo.getTitle().isEmpty()){
+            return ResultObj.ADD_ERROR;
+        }
         try {
             deptVo.setCreatetime(new Date());
             this.deptService.save(deptVo);
@@ -97,6 +98,49 @@ public class DeptController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
+        }
+    }
+    /*
+    查询最大的排序码
+     */
+    @RequestMapping("loadDeptMaxOrderNum")
+    public Integer loadDeptMaxOrderNum(){
+        QueryWrapper<Dept> queryWrapper=new QueryWrapper<>();
+        queryWrapper.orderByDesc("ordernum");
+        queryWrapper.last("limit 1");
+        Dept one = this.deptService.getOne(queryWrapper);
+        Integer i = one.getOrdernum() + 1;
+        return i;
+    }
+
+    /*
+    检查是否存在子部门
+     */
+    @RequestMapping("checkDeptHasChildNode")
+    public Map<String,Object> checkDeptHasChildNode(DeptVo deptVo){
+        Map<String,Object> map=new HashMap<>();
+        QueryWrapper<Dept> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("pid",deptVo.getId());
+        List<Dept> list = this.deptService.list(queryWrapper);
+        if (list.size()>0){
+            map.put("value",true);
+        }else {
+            map.put("value",false);
+        }
+        return map;
+    }
+
+    /*
+    删除
+     */
+    @RequestMapping("deleteDept")
+    public ResultObj deleteDept(DeptVo deptVo){
+        try {
+            this.deptService.removeById(deptVo.getId());
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
         }
     }
 

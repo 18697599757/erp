@@ -22,6 +22,7 @@
 <ul id="deptTree" class="dtree" data-id="0"></ul>
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
+    var deptTree;
     layui.extend({
         dtree:'/resources/layui_ext/dtree/dtree'
     }).use(['dtree','layer','jquery'],function () {
@@ -29,7 +30,7 @@
         var layer=layui.layer;
         $=layui.jquery;
 
-        var deptTree=dtree.render({
+         deptTree=dtree.render({
             elem:"#deptTree",
             dataStyle:"layuiStyle",
             dataFormat:"list",

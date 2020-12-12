@@ -13,6 +13,9 @@
     <link rel="icon" href="/resources/favicon.ico">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all" />
+
 </head>
 <body class="childrenBody">
 <!-- 查询条件开始 -->
@@ -21,6 +24,7 @@
 </fieldset>
 <blockquote class="layui-elem-quote">
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
+
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">部门名称</label>
@@ -62,9 +66,6 @@
         <button type="button" lay-event="add" class="layui-btn layui-btn-sm layui-btn"><span class="layui-icon layui-icon-add-1"></span>添加部门</button>
 
     </div>
-
-
-
     <div id="deptRowBar" style="display: none;">
         <button type="button" lay-event="update" class="layui-btn layui-btn-sm layui-btn"><span class="layui-icon layui-icon-edit"></span>更新</button>
         <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
@@ -78,6 +79,7 @@
 <div style="display: none;padding: 5px" id="addOrUpdateDiv">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
+            <input type="hidden" id="id" name="id">
             <label class="layui-form-label">父级部门</label>
             <div class="layui-input-block">
                 <input type="hidden" name="pid" id="pid">
@@ -87,7 +89,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">部门名称</label>
             <div class="layui-input-block">
-                <input type="hidden" id="id">
+
                 <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入部门名称" class="layui-input">
             </div>
         </div>
@@ -146,7 +148,7 @@
     var tableIns;
     layui.extend({
         dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
-    }).use(['jquery','form','table','layer'],function(){
+    }).use(['jquery','form','table','layer','dtree'],function(){
         var $=layui.jquery;
         var form=layui.form;
         var table=layui.table;
@@ -205,7 +207,6 @@
 
         //监听行工具条的事件
         table.on("tool(deptTable)",function(obj){
-
             var data = obj.data; //获得当前行数据
             switch(obj.event){
                 case 'update':
@@ -214,8 +215,6 @@
                 case 'delete':
                     deleteDept(data);
                     break;
-
-
             };
         });
 
@@ -229,12 +228,10 @@
                 area:['800px','600px'],
                 title:'添加部门',
                 success:function () {
-
                     $("#dataFrm")[0].reset();
                     url="/dept/addDept";
-
                     $.get("/dept/loadDeptMaxOrderNum",function (res) {
-                        $("#ordernum").val(res.value);
+                        $("#ordernum").val(res);
                     })
 
                 }
@@ -249,13 +246,11 @@
                 area:['800px','600px'],
                 title:'修改部门',
                 success:function () {
-
                     $("#dataFrm")[0].reset();
                     //装载新的数据
                     form.val("dataFrm",data);
                     dtree.dataInit("deptTree",data.pid);
                     dtree.setSelectValue("deptTree");
-
                     url="/dept/updateDept";
 
                 }
@@ -283,15 +278,25 @@
 
         //删除
         function deleteDept(data){
-            layer.confirm('你确定要删除['+data.title+']这个部门么吗?', {icon: 3, title:'提示'}, function(index){
-                $.post("/dept/deleteDept",{id:data.id},function(res){
-                    if(res.code==200){
-                        tableIns.reload();
-                    }
-                    layer.msg(res.msg);
-                })
-                layer.close(index);
-            });
+            $.post('/dept/checkDeptHasChildNode',{id:data.id},function (result) {
+                if (result.value){
+                    layer.msg("当前部门节点有子部门,请先删除子部门")
+                }else {
+                    layer.confirm('你确定要删除['+data.title+']这个部门么吗?', {icon: 3, title:'提示'}, function(index){
+                        $.post("/dept/deleteDept",{id:data.id},function(res){
+                            if(res.code==200){
+                                tableIns.reload();
+                                selectTree.reload();
+                                window.parent.left.deptTree.reload();
+                            }
+                            layer.msg(res.msg);
+                        })
+                        layer.close(index);
+                    });
+                }
+
+            })
+
         }
         //初始化下拉树
         var selectTree=dtree.renderSelect({
