@@ -20,12 +20,21 @@ public class TreeNode {
     private String href;
     private Boolean spread;
     private List<TreeNode> children =new ArrayList<TreeNode>();
+    private String checkArr="0";
 
     public TreeNode(Integer id, Integer pid, String title, Boolean spread) {
         this.id = id;
         this.pid = pid;
         this.title = title;
         this.spread = spread;
+    }
+
+    public TreeNode(Integer id, Integer pid, String title, Boolean spread, String checkArr) {
+        this.id = id;
+        this.pid = pid;
+        this.title = title;
+        this.spread = spread;
+        this.checkArr = checkArr;
     }
 
     public TreeNode(Integer id, Integer pid, String title, String icon, String href, Boolean spread) {

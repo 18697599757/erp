@@ -13,7 +13,7 @@
 .layui-right{text-align:right;}
 .layui-elem-quote.title{ padding:10px 15px; margin-bottom:0;}
 .layui-bg-white{ background-color:#fff !important;}
-.border{ border:1px solid #e6e6e6 !important; padding:10px; border-top:none;}
+.border{border:1px solid #e6e6e6 !important; padding:10px; border-top:none;}
 .main_btn .layui-btn{ margin:2px 5px 2px 0;}
 .layui-timeline-axis{ left:-4px;}
 .layui-elem-quote{ word-break: break-all;}

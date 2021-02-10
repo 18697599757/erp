@@ -5,6 +5,7 @@ public interface Constast {
 
     public static final Integer OK=200;
     public static final Integer ERROR=-1;
+    public static final String USER_DEFAULT_PWD="123456";
 
     /*
      * 菜单权限类型

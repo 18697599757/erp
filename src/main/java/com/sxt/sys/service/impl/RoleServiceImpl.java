@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -26,4 +27,27 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         this.getBaseMapper().deleteRoleUserByRid(id);
         return super.removeById(id);
     }
+
+    @Override
+    public List<Integer> queryRolePermissionIdsByRid(Integer roleId) {
+        return this.getBaseMapper().queryRolePermissionIdsByRid(roleId);
+    }
+
+    @Override
+    public void saveRolePermission(Integer rid, Integer[] ids) {
+        RoleMapper roleMapper = this.getBaseMapper();
+        roleMapper.deleteRolePermissionByRid(rid);
+        if (ids!=null&&ids.length>0){
+            for (Integer pid : ids) {
+                roleMapper.saveRolePermission(rid,pid);
+            }
+        }
+    }
+
+    @Override
+    public List<Integer> queryUserRoleIdsByUid(Integer id) {
+        return this.getBaseMapper().queryUserRoleIdsByUid(id);
+    }
+
+
 }

@@ -91,4 +91,12 @@ public class SystemController {
     }
 
 
+    /*
+    跳转到用户管理
+     */
+    @RequestMapping("toUserManager")
+    public String toUserManager(){
+        return "system/user/userManager";
+    }
+
 }

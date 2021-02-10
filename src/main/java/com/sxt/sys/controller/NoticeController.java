@@ -66,6 +66,7 @@ public class NoticeController {
     public ResultObj addNotice(NoticeVo noticeVo) {
         try {
 
+
             noticeVo.setCreatetime(new Date());
             User user = (User) WebUtils.getSession().getAttribute("user");
             noticeVo.setOpername(user.getName());

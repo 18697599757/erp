@@ -19,7 +19,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("login")
-public class LoginController {
+public class  LoginController {
     @Autowired
     private LoginfoService loginfoService;
 
